@@ -29,7 +29,7 @@ public class SampleScene : MonoBehaviour
     {
         BaseTenjin instance = Tenjin.getInstance("WZVBMOQEHIMJZD2CZ1VQYIGR16PQAWWC");
 
-        instance.SetAppStoreType(AppStoreType.other);
+        instance.SetAppStoreType(AppStoreType.googleplay);
 
 #if UNITY_IOS
       if (new Version(Device.systemVersion).CompareTo(new Version("14.0")) >= 0) {
