@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
+//
+
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -72,16 +76,87 @@ public class DebugTenjin : BaseTenjin {
 		Debug.Log("AppendAppSubversion: " + subversion);
 	}
 
-    public override void SubscribeMoPubImpressions()
-    {
-        Debug.Log("Subscribing to mopub impressions");
-        TenjinMopubIntegration.ListenForImpressions(ImpressionHandler);
-    }
-
     private void ImpressionHandler(string json)
     {
         Debug.Log($"Got impression data {json}");
     }
+
+	public override void SubscribeAppLovinImpressions()
+	{
+		Debug.Log("Subscribing to applovin impressions");
+		TenjinAppLovinIntegration.ListenForImpressions(AppLovinImpressionHandler);
+	}
+
+	private void AppLovinImpressionHandler(string json)
+	{
+		Debug.Log($"Got applovin impression data {json}");
+	}
+
+	public override void SubscribeIronSourceImpressions()
+	{
+		Debug.Log("Subscribing to ironsource impressions");
+		TenjinIronSourceIntegration.ListenForImpressions(IronSourceImpressionHandler);
+	}
+
+	private void IronSourceImpressionHandler(string json)
+	{
+		Debug.Log($"Got ironsource impression data {json}");
+	}
+
+	public override void SubscribeHyperBidImpressions()
+	{
+		Debug.Log("Subscribing to hyperbid impressions");
+		TenjinHyperBidIntegration.ListenForImpressions(HyperBidImpressionHandler);
+	}
+
+	private void HyperBidImpressionHandler(string json)
+	{
+		Debug.Log($"Got hyperbid impression data {json}");
+	}
+
+	public override void SubscribeAdMobBannerViewImpressions(object bannerView, string adUnitId)
+	{
+		Debug.Log("Subscribing to admob bannerView impressions");
+		TenjinAdMobIntegration.ListenForBannerViewImpressions(bannerView, adUnitId, AdMobBannerViewImpressionHandler);
+	}
+
+	public override void SubscribeAdMobRewardedAdImpressions(object rewardedAd, string adUnitId)
+	{
+		Debug.Log("Subscribing to admob rewardedAd impressions");
+		TenjinAdMobIntegration.ListenForRewardedAdImpressions(rewardedAd, adUnitId, AdMobRewardedAdImpressionHandler);
+	}
+	
+	public override void SubscribeAdMobInterstitialAdImpressions(object interstitialAd, string adUnitId)
+	{
+		Debug.Log("Subscribing to admob interstitialAd impressions");
+		TenjinAdMobIntegration.ListenForInterstitialAdImpressions(interstitialAd, adUnitId, AdMobInterstitialAdImpressionHandler);
+	}
+
+	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
+	{
+		Debug.Log("Subscribing to admob rewardedInterstitialAd impressions");
+		TenjinAdMobIntegration.ListenForRewardedInterstitialAdImpressions(rewardedInterstitialAd, adUnitId, AdMobRewardedInterstitialAdImpressionHandler);
+	}
+
+	private void AdMobBannerViewImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob bannerView impression data {json}");
+	}
+
+	private void AdMobRewardedAdImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob rewardedAd impression data {json}");
+	}
+
+	private void AdMobInterstitialAdImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob interstitialAd impression data {json}");
+	}
+
+	private void AdMobRewardedInterstitialAdImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob rewardedInterstitialAd impression data {json}");
+	}
 
 	public override void RegisterAppForAdNetworkAttribution()
     {

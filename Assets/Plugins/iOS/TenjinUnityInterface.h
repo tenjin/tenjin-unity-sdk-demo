@@ -48,9 +48,13 @@ void iosTenjinUpdateConversionValue(int conversionValue);
 void iosTenjinRequestTrackingAuthorizationWithCompletionHandler();
 
 void iosTenjinSetDebugLogs();
-    
-void iosTenjinSubscribeMoPubImpressions();
-void iosTenjinMopubImpressionFromJSON(const char* jsonString);
+
+void iosTenjinSubscribeAppLovinImpressions();
+void iosTenjinSubscribeIronSourceImpressions();
+void iosTenjinAppLovinImpressionFromJSON(const char* jsonString);
+void iosTenjinIronSourceImpressionFromJSON(const char* jsonString);
+void iosTenjinHyperBidImpressionFromJSON(const char* jsonString);
+void iosTenjinSubscribeAbMobImpressionFromJSON(const char* jsonString);
 }
 
 #endif

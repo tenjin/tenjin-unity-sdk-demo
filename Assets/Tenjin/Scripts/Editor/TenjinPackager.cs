@@ -1,4 +1,8 @@
-﻿using System;
+﻿//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
+//
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

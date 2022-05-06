@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
+//
+
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 

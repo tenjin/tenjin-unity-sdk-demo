@@ -1,16 +1,23 @@
-﻿using System.Collections;
+﻿//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
+//
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 using UnityEngine;
 
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-using System;
-using System.IO;
 using UnityEditor.Compilation;
-using System.Linq;
 using UnityEditor.Build.Content;
 using UnityEditor.Callbacks;
+
+using System.Reflection;
 using Assembly = System.Reflection.Assembly;
 
 #if UNITY_IOS
@@ -21,8 +28,12 @@ namespace Tenjin
 {
     class TenjinEditorPrefs : IPreprocessBuildWithReport
     {
-        private static string tenjin_mopub = "tenjin_mopub_enabled";
+        private static string tenjin_admob = "tenjin_admob_enabled";
+        private static string tenjin_applovin = "tenjin_applovin_enabled";
         private static string tenjin_facebook = "tenjin_facebook_enabled";
+        private static string tenjin_hyperbid = "tenjin_hyperbid_enabled";
+        private static string tenjin_ironsource = "tenjin_ironsource_enabled";
+
 
         public int callbackOrder => 0;
 
@@ -39,12 +50,15 @@ namespace Tenjin
 
         private static void Update3rdPartyIntegrations()
         {
-            UpdateMoPub();
+            UpdateAdMob();
+            UpdateAppLovin();
             UpdateFacebook();
+            UpdateHyperBid();
+            UpdateIronSource();
         }
 
         [PostProcessBuild(0)]
-        public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject) 
+        public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
         {
             ProcessIosBuild(target, pathToBuiltProject);
         }
@@ -55,13 +69,13 @@ namespace Tenjin
             {
                 if (PlayerSettings.iOS.sdkVersion == iOSSdkVersion.SimulatorSDK)
                 {
-                   Debug.Log("Using simulator sdk - delete non universal tenjin lib from generated xcode project");
-                   RemoveFileFromXcodeProject("Libraries/Plugins/iOS/libTenjinSDK.a", pathToBuiltProject); 
+                    Debug.Log("Using simulator sdk - delete non universal tenjin lib from generated xcode project");
+                    RemoveFileFromXcodeProject("Libraries/Plugins/iOS/libTenjinSDK.a", pathToBuiltProject);
                 }
                 else
                 {
-                   Debug.Log("Using device sdk - delete universal tenjin lib from generated xcode project");
-                   RemoveFileFromXcodeProject("Libraries/Plugins/iOS/libTenjinSDKUniversal.a", pathToBuiltProject); 
+                    Debug.Log("Using device sdk - delete universal tenjin lib from generated xcode project");
+                    RemoveFileFromXcodeProject("Libraries/Plugins/iOS/libTenjinSDKUniversal.a", pathToBuiltProject);
                 }
             }
         }
@@ -80,71 +94,139 @@ namespace Tenjin
             File.WriteAllText (projectPath, pbxProject.WriteToString ());
 #endif
         }
-        
+
+        #region third Party Library Detection
         private static void UpdateDefines(string entry, bool enabled, BuildTargetGroup[] groups)
         {
             foreach (var group in groups)
             {
-                var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(group)
-                                        .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                        .Where(d => d != entry);
-
+                var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(group).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Where(d => d != entry);
                 if (enabled)
+                {
                     defines = defines.Concat(new[] { entry });
+                }
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(group, string.Join(";", defines.ToArray()));
-            }
-        }
-
-        #region 3rd Party Lib Detection
-
-        /// <summary>
-        /// Sets the scripting define symbol `tenjin_facebook_enabled` to true if Facebook classes are detected within the Unity project
-        /// </summary>
-        private static void UpdateFacebook()
-        {
-            var facebookTypes = new string[]{"Facebook", "FB"};
-            if(TypeExists(facebookTypes))
-            {
-                UpdateDefines(tenjin_facebook, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
-            }
-            else
-            {
-                UpdateDefines(tenjin_facebook, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
-            }
-        }
-        
-
-        /// <summary>
-        /// Sets the scripting define symbol `tenjin_mopub_enabled` to true if MoPub classes are detected within the Unity project
-        /// </summary>
-        private static void UpdateMoPub()
-        {
-            var mopubTypes = new string[]{"MoPubBase", "MoPubManager"};
-            if(TypeExists(mopubTypes))
-            {
-                UpdateDefines(tenjin_mopub, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
-            }
-            else
-            {
-                UpdateDefines(tenjin_mopub, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
             }
         }
 
         private static bool TypeExists(params string[] types)
         {
             if (types == null || types.Length == 0)
-                return false;
-            
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
             {
-                if (types.Any(type => assembly.GetType(type) != null))
-                    return true;
+                return false;
+            }
+
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type type in assembly.GetTypes())
+                {
+                    foreach (var typeValue in types)
+                    {
+                        if (type.Namespace == typeValue)
+                        {
+                            return true;
+                        }
+                        if (type.FullName == typeValue)
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
 
             return false;
         }
-        
+
+        /// <summary>
+        /// Sets the scripting define symbol `tenjin_admob_enabled` to true if AdMob classes are detected within the Unity project
+        /// </summary>
+        private static void UpdateAdMob()
+        {
+            var abmobTypes = new string[] { "GoogleMobileAds.Common", "GoogleMobileAds.Api" };
+            if (TypeExists(abmobTypes))
+            {
+                UpdateDefines(tenjin_admob, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("AdMob SDK found");
+            }
+            else
+            {
+                UpdateDefines(tenjin_admob, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("AdMob SDK not found");
+            }
+        }
+
+        /// <summary>
+        /// Sets the scripting define symbol `tenjin_applovin_enabled` to true if AppLovin classes are detected within the Unity project
+        /// </summary>
+        private static void UpdateAppLovin()
+        {
+            var applovinTypes = new string[] { "MaxSdkBase", "MaxSdkCallbacks" };
+            if (TypeExists(applovinTypes))
+            {
+                UpdateDefines(tenjin_applovin, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("AppLovin SDK found");
+            }
+            else
+            {
+                UpdateDefines(tenjin_applovin, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("AppLovin SDK not found");
+            }
+        }
+
+        /// <summary>
+        /// Sets the scripting define symbol `tenjin_facebook_enabled` to true if Facebook classes are detected within the Unity project
+        /// </summary>
+        private static void UpdateFacebook()
+        {
+            var facebookTypes = new string[] { "Facebook", "FB" };
+            if (TypeExists(facebookTypes))
+            {
+                UpdateDefines(tenjin_facebook, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("Facebook SDK found");
+            }
+            else
+            {
+                UpdateDefines(tenjin_facebook, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("Facebook SDK not found");
+            }
+        }
+
+        /// <summary>
+        /// Sets the scripting define symbol `tenjin_hyperbid_enabled` to true if HyperBid classes are detected within the Unity project
+        /// </summary>
+        private static void UpdateHyperBid()
+        {
+            var hyperbidTypes = new string[] { "HyperBid.Api", "HyperBid.Api.HBCallbackInfo" };
+            if (TypeExists(hyperbidTypes))
+            {
+                UpdateDefines(tenjin_hyperbid, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("HyperBid SDK found");
+            }
+            else
+            {
+                UpdateDefines(tenjin_hyperbid, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("HyperBid SDK not found");
+            }
+        }
+
+        /// <summary>
+        /// Sets the scripting define symbol `tenjin_ironsource_enabled` to true if IronSource classes are detected within the Unity project
+        /// </summary>
+        private static void UpdateIronSource()
+        {
+            var ironsourceTypes = new string[] { "IronSource", "IronSourceEvents" };
+            if (TypeExists(ironsourceTypes))
+            {
+                UpdateDefines(tenjin_ironsource, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("Ironsource SDK found");
+            }
+            else
+            {
+                UpdateDefines(tenjin_ironsource, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("Ironsource SDK not found");
+            }
+        }
+
         #endregion
     }
 }
