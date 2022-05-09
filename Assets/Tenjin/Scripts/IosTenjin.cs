@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
 
-public class IosTenjin : BaseTenjin {
+public class IosTenjin : BaseTenjin
+{
 
 #if UNITY_IPHONE && !UNITY_EDITOR
 
@@ -66,8 +67,17 @@ public class IosTenjin : BaseTenjin {
 	[DllImport ("__Internal")]
  	private static extern void iosTenjinRegisterDeepLinkHandler(DeepLinkHandlerNativeDelegate deepLinkHandlerNativeDelegate);
 
-    [DllImport ("__Internal")]
-    private static extern void iosTenjinMopubImpressionFromJSON(string jsonString);
+	[DllImport ("__Internal")]
+    private static extern void iosTenjinAppLovinImpressionFromJSON(string jsonString);
+
+	[DllImport ("__Internal")]
+    private static extern void iosTenjinIronSourceImpressionFromJSON(string jsonString);
+
+	[DllImport ("__Internal")]
+    private static extern void iosTenjinHyperBidImpressionFromJSON(string jsonString);
+
+	[DllImport ("__Internal")]
+    private static extern void iosTenjinAdMobImpressionFromJSON(string jsonString);
 
     [DllImport ("__Internal")]
     private static extern void iosTenjinSetDebugLogs();
@@ -80,7 +90,8 @@ public class IosTenjin : BaseTenjin {
 	private static readonly Stack<Dictionary<string, string>> deferredDeeplinkEvents = new Stack<Dictionary<string, string>>();
 	private static Tenjin.DeferredDeeplinkDelegate registeredDeferredDeeplinkDelegate;
 
-	public override void Init(string apiKey){
+	public override void Init(string apiKey)
+	{
 		if (Debug.isDebugBuild) {
             Debug.Log ("iOS Initializing - v"+this.SdkVersion);
 		}
@@ -89,7 +100,8 @@ public class IosTenjin : BaseTenjin {
 		iosTenjinInit (ApiKey);
 	}
 
-	public override void InitWithSharedSecret(string apiKey, string sharedSecret){
+	public override void InitWithSharedSecret(string apiKey, string sharedSecret)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log("iOS Initializing with Shared Secret - v"+this.SdkVersion);
 		}
@@ -99,7 +111,8 @@ public class IosTenjin : BaseTenjin {
 		iosTenjinInitWithSharedSecret (ApiKey, SharedSecret);
 	}
 
-	public override void InitWithAppSubversion(string apiKey, int appSubversion){
+	public override void InitWithAppSubversion(string apiKey, int appSubversion)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log("iOS Initializing with App Subversion: " + appSubversion + " v" +this.SdkVersion);
 		}
@@ -109,7 +122,8 @@ public class IosTenjin : BaseTenjin {
 		iosTenjinInitWithAppSubversion (ApiKey, AppSubversion);
 	}
 
-	public override void InitWithSharedSecretAppSubversion(string apiKey, string sharedSecret, int appSubversion){
+	public override void InitWithSharedSecretAppSubversion(string apiKey, string sharedSecret, int appSubversion)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log("iOS Initializing with Shared Secret + App Subversion: " + appSubversion +" v" +this.SdkVersion);
 		}
@@ -120,69 +134,79 @@ public class IosTenjin : BaseTenjin {
 		iosTenjinInitWithSharedSecretAppSubversion (ApiKey, SharedSecret, AppSubversion);
 	}
 
-    private void SetUnityVersionInNativeSDK() {
+    private void SetUnityVersionInNativeSDK()
+	{
 		var unitySdkVersion = this.SdkVersion + "u";
 
 	    iosTenjinSetWrapperVersion(unitySdkVersion);
     }
 
-	public override void Connect(){
+	public override void Connect()
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS Connecting");
 		}
 		iosTenjinConnect();
 	}
 	
-	public override void Connect(string deferredDeeplink){
+	public override void Connect(string deferredDeeplink)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS Connecting with deferredDeeplink " + deferredDeeplink);
 		}
 		iosTenjinConnectWithDeferredDeeplink (deferredDeeplink);
 	}
 
-	public override void OptIn(){
+	public override void OptIn()
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS OptIn");
 		}
 		iosTenjinOptIn ();
 	}
 
-	public override void OptOut(){
+	public override void OptOut()
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS OptOut");
 		}
 		iosTenjinOptOut ();
 	}
     
-	public override void OptInParams(List<string> parameters){
+	public override void OptInParams(List<string> parameters)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS OptInParams" + parameters.ToString());
 		}
 		iosTenjinOptInParams (parameters.ToArray(), parameters.Count);
 	}
 
-	public override void OptOutParams(List<string> parameters){
+	public override void OptOutParams(List<string> parameters)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS OptOutParams" + parameters.ToString());
 		}
 		iosTenjinOptOutParams (parameters.ToArray(), parameters.Count);
 	}
 
-	public override void RegisterAppForAdNetworkAttribution(){
+	public override void RegisterAppForAdNetworkAttribution()
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS RegisterAppForAdNetworkAttribution");
 		}
 		iosTenjinRegisterAppForAdNetworkAttribution ();
 	}
 
-	public override void UpdateConversionValue(int conversionValue){
+	public override void UpdateConversionValue(int conversionValue)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS UpdateConversionValue");
 		}
 		iosTenjinUpdateConversionValue (conversionValue);
 	}
 
-	public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback){
+	public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS RequestTrackingAuthorizationWithCompletionHandler");
 		}
@@ -190,35 +214,40 @@ public class IosTenjin : BaseTenjin {
 		iosTenjinRequestTrackingAuthorizationWithCompletionHandler();
 	}
 
-	private void SetTrackingAuthorizationStatus(string status){
+	private void SetTrackingAuthorizationStatus(string status)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS SetTrackingAuthorizationStatus " + status);
 		}
 		Tenjin.authorizationStatusDelegate(Int16.Parse(status));
 	}
 
-	public override void AppendAppSubversion(int appSubversion){
+	public override void AppendAppSubversion(int appSubversion)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS AppendAppSubversion " + appSubversion);
 		}
 		iosTenjinAppendAppSubversion (appSubversion);
 	}
 
-	public override void SendEvent(string eventName){
+	public override void SendEvent(string eventName)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS Sending Event " + eventName);
 		}
 		iosTenjinSendEvent(eventName);
 	}
 
-	public override void SendEvent(string eventName, string eventValue){
+	public override void SendEvent(string eventName, string eventValue)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("iOS Sending Event " + eventName + " : " + eventValue);
 		}
 		iosTenjinSendEventWithValue(eventName, eventValue);
 	}
 
-	public override void Transaction(string productId, string currencyCode, int quantity, double unitPrice, string transactionId, string receipt, string signature){
+	public override void Transaction(string productId, string currencyCode, int quantity, double unitPrice, string transactionId, string receipt, string signature)
+	{
 		signature = null;
 
 		//only if the receipt and transaction_id are not null, then try to validate the transaction. Otherwise manually record the transaction
@@ -236,21 +265,108 @@ public class IosTenjin : BaseTenjin {
 		}
 	}
 
-	public override void SetAppStoreType(AppStoreType appStoreType) {
+	public override void SetAppStoreType(AppStoreType appStoreType)
+	{
 	}
 
-    public override void SubscribeMoPubImpressions(){
-        TenjinMopubIntegration.ListenForImpressions(ILARHandler);
+	public override void SubscribeAppLovinImpressions()
+	{
+        TenjinAppLovinIntegration.ListenForImpressions(AppLovinILARHandler);
     }
 
-    public void ILARHandler(string json){
+    public void AppLovinILARHandler(string json) {
         if(!string.IsNullOrEmpty(json))
         {
-            iosTenjinMopubImpressionFromJSON(json);
+			Debug.Log($"Got AppLovin ILRD impression data {json}");
+            iosTenjinAppLovinImpressionFromJSON(json);
         }
     }
 
-	public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate) {
+	public override void SubscribeIronSourceImpressions()
+	{
+        TenjinIronSourceIntegration.ListenForImpressions(IronSourceILARHandler);
+    }
+
+	public void IronSourceILARHandler(string json)
+	{
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got IronSource ILRD impression data {json}");
+            iosTenjinIronSourceImpressionFromJSON(json);
+        }
+    }
+
+	public override void SubscribeHyperBidImpressions()
+	{
+        TenjinHyperBidIntegration.ListenForImpressions(HyperBidILARHandler);
+    }
+
+	public void HyperBidILARHandler(string json)
+	{
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got HyperBid ILRD impression data {json}");
+            iosTenjinHyperBidImpressionFromJSON(json);
+        }
+    }
+
+	public override void SubscribeAdMobBannerViewImpressions(object bannerView, string adUnitId)
+	{
+        TenjinAdMobIntegration.ListenForBannerViewImpressions(bannerView, adUnitId, AdMobBannerViewILARHandler);
+    }
+
+	public override void SubscribeAdMobRewardedAdImpressions(object rewardedAd,string adUnitId)
+	{
+        TenjinAdMobIntegration.ListenForRewardedAdImpressions(rewardedAd, adUnitId, AdMobRewardedAdILARHandler);
+    }
+
+	public override void SubscribeAdMobInterstitialAdImpressions(object interstitialAd, string adUnitId)
+	{
+        TenjinAdMobIntegration.ListenForInterstitialAdImpressions(interstitialAd, adUnitId, AdMobInterstitialAdILARHandler);
+    }
+
+	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
+	{
+        TenjinAdMobIntegration.ListenForRewardedInterstitialAdImpressions(rewardedInterstitialAd, adUnitId, AdMobRewardedInterstitialAdILARHandler);
+    }
+
+	public void AdMobBannerViewILARHandler(string json){
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got AdMob BannerView ILRD impression data {json}");
+            iosTenjinAdMobImpressionFromJSON(json);
+        }
+    }
+
+	public void AdMobRewardedAdILARHandler(string json)
+	{
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got AdMob RewardedAd ILRD impression data {json}");
+            iosTenjinAdMobImpressionFromJSON(json);
+        }
+    }
+
+	public void AdMobInterstitialAdILARHandler(string json)
+	{
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got AdMob InterstitialAd ILRD impression data {json}");
+            iosTenjinAdMobImpressionFromJSON(json);
+        }
+    }
+
+	public void AdMobRewardedInterstitialAdILARHandler(string json)
+	{
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got AdMob RewardedInterstitialAd ILRD impression data {json}");
+            iosTenjinAdMobImpressionFromJSON(json);
+        }
+    }
+
+	public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate)
+	{
 		if (Debug.isDebugBuild) {
 			Debug.Log ("Sending IosTenjin::GetDeeplink");
 		}
@@ -258,11 +374,13 @@ public class IosTenjin : BaseTenjin {
 		iosTenjinRegisterDeepLinkHandler(DeepLinkHandler);
 	}
 
-	public override void DebugLogs() {
+	public override void DebugLogs()
+	{
 		iosTenjinSetDebugLogs();
     }
 
-	private void Update() {
+	private void Update()
+	{
 		lock (deferredDeeplinkEvents) {
 			while (deferredDeeplinkEvents.Count > 0) {
 				Dictionary<string, string> deepLinkData = deferredDeeplinkEvents.Pop();
@@ -274,7 +392,8 @@ public class IosTenjin : BaseTenjin {
 	}
 
 	[MonoPInvokeCallback(typeof(DeepLinkHandlerNativeDelegate))]
-	private static void DeepLinkHandler(IntPtr deepLinkDataPairArray, int deepLinkDataPairCount) {
+	private static void DeepLinkHandler(IntPtr deepLinkDataPairArray, int deepLinkDataPairCount)
+	{
 		if (deepLinkDataPairArray == IntPtr.Zero)
 			return;
 
@@ -290,7 +409,8 @@ public class IosTenjin : BaseTenjin {
 		/// <summary>
 		/// Marshals a native linear array of structs to the managed array.
 		/// </summary>
-		public static T[] MarshalNativeStructArray<T>(IntPtr nativeArrayPtr, int nativeArraySize) where T : struct {
+		public static T[] MarshalNativeStructArray<T>(IntPtr nativeArrayPtr, int nativeArraySize) where T : struct
+		{
 			if (nativeArrayPtr == IntPtr.Zero)
 				throw new ArgumentNullException("nativeArrayPtr");
 
@@ -312,7 +432,8 @@ public class IosTenjin : BaseTenjin {
 		/// <summary>
 		/// Marshals the native representation to a IDictionary&lt;string, string&gt;.
 		/// </summary>
-		public static Dictionary<string, string> MarshalStringStringDictionary(IntPtr nativePairArrayPtr, int nativePairArraySize) {
+		public static Dictionary<string, string> MarshalStringStringDictionary(IntPtr nativePairArrayPtr, int nativePairArraySize)
+		{
 			if (nativePairArrayPtr == IntPtr.Zero)
 				throw new ArgumentNullException("nativePairArrayPtr");
 
@@ -328,109 +449,155 @@ public class IosTenjin : BaseTenjin {
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
-		public struct StringStringKeyValuePair {
+		public struct StringStringKeyValuePair
+		{
 			public string Key;
 			public string Value;
 		}
 	}
 
 #else
-	public override void Init(string apiKey){
-		Debug.Log ("iOS Initializing - v"+this.SdkVersion);
-		ApiKey = apiKey;
-	}
-
-	public override void InitWithSharedSecret(string apiKey, string sharedSecret){
-		Debug.Log("iOS Initializing with Shared Secret - v"+this.SdkVersion);
-		ApiKey = apiKey;
-		SharedSecret = sharedSecret;
-	}
-
-	public override void InitWithAppSubversion(string apiKey, int appSubversion)
-	{
-		Debug.Log("iOS Initializing with App Subversion: " + appSubversion + " v" +this.SdkVersion);
-		ApiKey = apiKey;
-		AppSubversion = appSubversion;
-	}
-
-	public override void InitWithSharedSecretAppSubversion(string apiKey, string sharedSecret, int appSubversion)
-	{
-		Debug.Log("iOS Initializing with Shared Secret + App Subversion: " + appSubversion +" v" +this.SdkVersion);
-		ApiKey = apiKey;
-		SharedSecret = sharedSecret;
-		AppSubversion = appSubversion;
-	}
-
-	public override void Connect(){
-		Debug.Log ("iOS Connecting");
-	}
-
-	public override void Connect(string deferredDeeplink){
-		Debug.Log ("Connecting with deferredDeeplink " + deferredDeeplink);
-	}
-
-	public override void SendEvent(string eventName){
-		Debug.Log ("iOS Sending Event " + eventName);
-	}
-
-	public override void SendEvent(string eventName, string eventValue){
-		Debug.Log ("iOS Sending Event " + eventName + " : " + eventValue);
-	}
-
-	public override void Transaction(string productId, string currencyCode, int quantity, double unitPrice, string transactionId, string receipt, string signature){
-		Debug.Log ("iOS Transaction " + productId + ", " + currencyCode + ", " + quantity + ", " + unitPrice + ", " + transactionId + ", " + receipt + ", " + signature);
-	}
-
-	public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate) {
-		Debug.Log ("Sending IosTenjin::GetDeeplink");
-	}
-
-	public override void OptIn(){
-		Debug.Log ("iOS OptIn");
-	}
-
-	public override void OptOut(){
-		Debug.Log ("iOS OptOut");
-	}
-
-	public override void OptInParams(List<string> parameters){
-		Debug.Log ("iOS OptInParams");
-	}
-
-	public override void OptOutParams(List<string> parameters){
-		Debug.Log ("iOS OptOutParams");
-	}
-
-	public override void RegisterAppForAdNetworkAttribution()
-	{
-		Debug.Log("iOS RegisterAppForAdNetworkAttribution");
-	}
-
-	public override void UpdateConversionValue(int conversionValue)
-	{
-		Debug.Log("iOS UpdateConversionValue: " + conversionValue);
-	}
-
-	public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback)
+    public override void Init(string apiKey)
     {
-		Debug.Log("iOS RequestTrackingAuthorizationWithCompletionHandler");
-	}
-
-	public override void AppendAppSubversion(int subversion){
-		Debug.Log("iOS AppendAppSubversion");
-	}
-	
-	public override void DebugLogs(){
-		Debug.Log ("Setting debug logs ");
-	}
-	
-    public override void SubscribeMoPubImpressions()
-    {
-        Debug.Log("iOS SubscribeMoPubImpressions");
+        Debug.Log("iOS Initializing - v" + this.SdkVersion);
+        ApiKey = apiKey;
     }
 
-	public override void SetAppStoreType(AppStoreType appStoreType) {
-		Debug.Log("iOS SetAppStoreType");
-	}
+    public override void InitWithSharedSecret(string apiKey, string sharedSecret)
+    {
+        Debug.Log("iOS Initializing with Shared Secret - v" + this.SdkVersion);
+        ApiKey = apiKey;
+        SharedSecret = sharedSecret;
+    }
+
+    public override void InitWithAppSubversion(string apiKey, int appSubversion)
+    {
+        Debug.Log("iOS Initializing with App Subversion: " + appSubversion + " v" + this.SdkVersion);
+        ApiKey = apiKey;
+        AppSubversion = appSubversion;
+    }
+
+    public override void InitWithSharedSecretAppSubversion(string apiKey, string sharedSecret, int appSubversion)
+    {
+        Debug.Log("iOS Initializing with Shared Secret + App Subversion: " + appSubversion + " v" + this.SdkVersion);
+        ApiKey = apiKey;
+        SharedSecret = sharedSecret;
+        AppSubversion = appSubversion;
+    }
+
+    public override void Connect()
+    {
+        Debug.Log("iOS Connecting");
+    }
+
+    public override void Connect(string deferredDeeplink)
+    {
+        Debug.Log("Connecting with deferredDeeplink " + deferredDeeplink);
+    }
+
+    public override void SendEvent(string eventName)
+    {
+        Debug.Log("iOS Sending Event " + eventName);
+    }
+
+    public override void SendEvent(string eventName, string eventValue)
+    {
+        Debug.Log("iOS Sending Event " + eventName + " : " + eventValue);
+    }
+
+    public override void Transaction(string productId, string currencyCode, int quantity, double unitPrice, string transactionId, string receipt, string signature)
+    {
+        Debug.Log("iOS Transaction " + productId + ", " + currencyCode + ", " + quantity + ", " + unitPrice + ", " + transactionId + ", " + receipt + ", " + signature);
+    }
+
+    public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate)
+    {
+        Debug.Log("Sending IosTenjin::GetDeeplink");
+    }
+
+    public override void OptIn()
+    {
+        Debug.Log("iOS OptIn");
+    }
+
+    public override void OptOut()
+    {
+        Debug.Log("iOS OptOut");
+    }
+
+    public override void OptInParams(List<string> parameters)
+    {
+        Debug.Log("iOS OptInParams");
+    }
+
+    public override void OptOutParams(List<string> parameters)
+    {
+        Debug.Log("iOS OptOutParams");
+    }
+
+    public override void RegisterAppForAdNetworkAttribution()
+    {
+        Debug.Log("iOS RegisterAppForAdNetworkAttribution");
+    }
+
+    public override void UpdateConversionValue(int conversionValue)
+    {
+        Debug.Log("iOS UpdateConversionValue: " + conversionValue);
+    }
+
+    public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback)
+    {
+        Debug.Log("iOS RequestTrackingAuthorizationWithCompletionHandler");
+    }
+
+    public override void AppendAppSubversion(int subversion)
+    {
+        Debug.Log("iOS AppendAppSubversion");
+    }
+
+    public override void DebugLogs()
+    {
+        Debug.Log("Setting debug logs ");
+    }
+
+    public override void SubscribeAppLovinImpressions()
+    {
+        Debug.Log("iOS SubscribeAppLovinImpressions");
+    }
+
+    public override void SubscribeIronSourceImpressions()
+    {
+        Debug.Log("iOS SubscribeIronSourceImpressions");
+    }
+
+    public override void SubscribeHyperBidImpressions()
+    {
+        Debug.Log("iOS SubscribeHyperBidImpressions");
+    }
+
+    public override void SubscribeAdMobBannerViewImpressions(object bannerView, string adUnitId)
+    {
+        Debug.Log("iOS SubscribeAdMobBannerViewImpressions");
+    }
+
+	public override void SubscribeAdMobRewardedAdImpressions(object rewardedAd, string adUnitId)
+    {
+        Debug.Log("iOS SubscribeAdMobRewardedAdImpressions");
+    }
+
+	public override void SubscribeAdMobInterstitialAdImpressions(object interstitialAd, string adUnitId)
+    {
+        Debug.Log("iOS SubscribeAdMobInterstitialAdImpressions");
+    }
+
+	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
+    {
+        Debug.Log("iOS SubscribeAdMobRewardedInterstitialAdImpressions");
+    }
+
+    public override void SetAppStoreType(AppStoreType appStoreType)
+    {
+        Debug.Log("iOS SetAppStoreType");
+    }
 #endif
 }

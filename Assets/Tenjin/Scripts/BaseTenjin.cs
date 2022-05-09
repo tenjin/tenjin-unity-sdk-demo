@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
+//
+
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +15,7 @@ public abstract class BaseTenjin : MonoBehaviour {
 	protected bool optOut;
 	protected int appSubversion;
 
-	public string SdkVersion { get; } = "88.8888.88";
+    public string SdkVersion { get; } = "1.12.15";
 
 	public string ApiKey{
 		get{
@@ -60,5 +64,11 @@ public abstract class BaseTenjin : MonoBehaviour {
 	public abstract void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback);
 	public abstract void DebugLogs();
 	public abstract void SetAppStoreType(AppStoreType appStoreType);
-	public abstract void SubscribeMoPubImpressions();
+	public abstract void SubscribeAppLovinImpressions();
+	public abstract void SubscribeIronSourceImpressions();
+	public abstract void SubscribeHyperBidImpressions();
+	public abstract void SubscribeAdMobBannerViewImpressions(object bannerView, string adUnitId);
+	public abstract void SubscribeAdMobRewardedAdImpressions(object rewardedAd, string adUnitId);
+	public abstract void SubscribeAdMobInterstitialAdImpressions(object interstitialAd, string adUnitId);
+	public abstract void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId);
 }

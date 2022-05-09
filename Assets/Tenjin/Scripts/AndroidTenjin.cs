@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
+//
+
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -275,18 +279,96 @@ public class AndroidTenjin : BaseTenjin {
 		Debug.Log ("Debug logs not implemented on android");
 	}
 
-    public override void SubscribeMoPubImpressions()
+	public override void SubscribeAppLovinImpressions()
     {
-        Debug.Log("Subscribing to Mopub ILRD");
-        TenjinMopubIntegration.ListenForImpressions(ImpressionHandler);
+        Debug.Log("Subscribing to AppLovin ILRD");
+        TenjinAppLovinIntegration.ListenForImpressions(AppLovinImpressionHandler);
     }
 
-    private void ImpressionHandler(string json)
+	private void AppLovinImpressionHandler(string json)
     {
         Debug.Log($"Got ILRD impression data {json}");
         var args = new object[] {json};
-        tenjinJava.Call ("eventAdImpressionMoPub", args);
+        tenjinJava.Call ("eventAdImpressionAppLovin", args);
     }
+
+	public override void SubscribeIronSourceImpressions()
+    {
+        Debug.Log("Subscribing to IronSource ILRD");
+        TenjinIronSourceIntegration.ListenForImpressions(IronSourceImpressionHandler);
+    }
+
+	private void IronSourceImpressionHandler(string json)
+    {
+        Debug.Log($"Got ILRD impression data {json}");
+        var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionIronSource", args);
+    }
+
+	public override void SubscribeHyperBidImpressions()
+    {
+        Debug.Log("Subscribing to HyperBid ILRD");
+        TenjinHyperBidIntegration.ListenForImpressions(HyperBidImpressionHandler);
+    }
+
+	private void HyperBidImpressionHandler(string json)
+    {
+        Debug.Log($"Got ILRD impression data {json}");
+        var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionHyperBid", args);
+    }
+
+	public override void SubscribeAdMobBannerViewImpressions(object bannerView, string adUnitId)
+	{
+		Debug.Log("Subscribing to AdMob bannerView ILRD");
+		TenjinAdMobIntegration.ListenForBannerViewImpressions(bannerView, adUnitId, AdMobBannerViewImpressionHandler);
+	}
+
+	public override void SubscribeAdMobRewardedAdImpressions(object rewardedAd, string adUnitId)
+	{
+		Debug.Log("Subscribing to AdMob rewardedAd ILRD");
+		TenjinAdMobIntegration.ListenForRewardedAdImpressions(rewardedAd, adUnitId, AdMobRewardedAdImpressionHandler);
+	}
+
+	public override void SubscribeAdMobInterstitialAdImpressions(object interstitialAd, string adUnitId)
+	{
+		Debug.Log("Subscribing to AdMob interstitialAd ILRD");
+		TenjinAdMobIntegration.ListenForInterstitialAdImpressions(interstitialAd, adUnitId, AdMobInterstitialAdImpressionHandler);
+	}
+
+	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
+	{
+		Debug.Log("Subscribing to AdMob rewardedInterstitialAd ILRD");
+		TenjinAdMobIntegration.ListenForRewardedInterstitialAdImpressions(rewardedInterstitialAd, adUnitId, AdMobRewardedInterstitialAdImpressionHandler);
+	}
+
+	private void AdMobBannerViewImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob bannerView ILRD data {json}");
+		var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionAdMob", args);
+	}
+
+	private void AdMobRewardedAdImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob rewardedAd ILRD data {json}");
+		var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionAdMob", args);
+	}
+
+	private void AdMobInterstitialAdImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob interstitialAd ILRD data {json}");
+		var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionAdMob", args);
+	}
+
+	private void AdMobRewardedInterstitialAdImpressionHandler(string json)
+	{
+		Debug.Log($"Got admob rewardedInterstitialAd ILRD data {json}");
+		var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionAdMob", args);
+	}
 
 	public override void SetAppStoreType (AppStoreType appStoreType){
 		object[] args = new object[]{appStoreType};
@@ -370,11 +452,42 @@ public class AndroidTenjin : BaseTenjin {
 		Debug.Log("Sending AndroidTenjin::AppendAppSubversion :" + subversion);
 	}
 
-    public override void SubscribeMoPubImpressions()
-    {
-        Debug.Log("Sending AndroidTenjin:: SubscribeMoPubImpressions " );
-    }
-    public override void DebugLogs(){
+	public override void SubscribeAppLovinImpressions()
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeAppLovinImpressions ");
+	}
+
+	public override void SubscribeIronSourceImpressions()
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeIronSourceImpressions ");
+	}
+
+	public override void SubscribeHyperBidImpressions()
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeHyperBidImpressions ");
+	}
+
+	public override void SubscribeAdMobBannerViewImpressions(object bannerView, string adUnitId)
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeAdMobBannerViewImpressions ");
+	}
+
+	public override void SubscribeAdMobRewardedAdImpressions(object rewardedAd, string adUnitId)
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeAdMobRewardedAdImpressions ");
+	}
+
+	public override void SubscribeAdMobInterstitialAdImpressions(object interstitialAd,string adUnitId)
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeAdMobInterstitialAdImpressions ");
+	}
+
+	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeAdMobRewardedInterstitialAdImpressions ");
+	}
+
+	public override void DebugLogs(){
 	    Debug.Log ("Setting debug logs ");
     }
 

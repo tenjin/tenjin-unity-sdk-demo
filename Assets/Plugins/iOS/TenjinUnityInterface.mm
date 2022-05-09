@@ -2,8 +2,7 @@
 //  TenjinUnityInterface.mm
 //  Unity-iOS bridge
 //
-//  Created by Christopher Farm.
-//
+//  Copyright (c) 2022 Tenjin. All rights reserved.
 //
 
 #include "TenjinUnityInterface.h"
@@ -151,18 +150,40 @@ void iosTenjinRequestTrackingAuthorizationWithCompletionHandler(){
     }];
 }
 
-void iosTenjinSubscribeMoPubImpressions(){
-    [TenjinSDK subscribeMoPubImpressions];
+void iosTenjinSubscribeAppLovinImpressions(){
+    [TenjinSDK subscribeAppLovinImpressions];
+}
+
+void iosTenjinSubscribeIronSourceImpressions(){
+    [TenjinSDK subscribeIronSourceImpressions];
 }
 
 void iosTenjinSetDebugLogs(){
     [TenjinSDK debugLogs];
 }
-    
-void iosTenjinMopubImpressionFromJSON(const char* jsonString){
+
+void iosTenjinAppLovinImpressionFromJSON(const char* jsonString){
     NSString *jsonStr = [NSString stringWithUTF8String:jsonString];
 
-    [TenjinSDK mopubImpressionFromJSON:jsonStr];
+    [TenjinSDK appLovinImpressionFromJSON:jsonStr];
+}
+
+void iosTenjinIronSourceImpressionFromJSON(const char* jsonString){
+    NSString *jsonStr = [NSString stringWithUTF8String:jsonString];
+
+    [TenjinSDK ironSourceImpressionFromJSON:jsonStr];
+}
+
+void iosTenjinHyperBidImpressionFromJSON(const char* jsonString){
+    NSString *jsonStr = [NSString stringWithUTF8String:jsonString];
+
+    [TenjinSDK hyperBidImpressionFromJSON:jsonStr];
+}
+
+void iosTenjinAdMobImpressionFromJSON(const char* jsonString){
+    NSString *jsonStr = [NSString stringWithUTF8String:jsonString];
+
+    [TenjinSDK adMobImpressionFromJSON:jsonStr];
 }
     
 void iosTenjinRegisterDeepLinkHandler(TenjinDeeplinkHandlerFunc deeplinkHandlerFunc) {
