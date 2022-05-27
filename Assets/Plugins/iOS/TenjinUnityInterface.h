@@ -55,6 +55,7 @@ void iosTenjinAppLovinImpressionFromJSON(const char* jsonString);
 void iosTenjinIronSourceImpressionFromJSON(const char* jsonString);
 void iosTenjinHyperBidImpressionFromJSON(const char* jsonString);
 void iosTenjinSubscribeAbMobImpressionFromJSON(const char* jsonString);
+void iosTenjinTopOnImpressionFromJSON(const char* jsonString);
 }
 
 #endif

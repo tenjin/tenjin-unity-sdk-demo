@@ -33,6 +33,7 @@ namespace Tenjin
         private static string tenjin_facebook = "tenjin_facebook_enabled";
         private static string tenjin_hyperbid = "tenjin_hyperbid_enabled";
         private static string tenjin_ironsource = "tenjin_ironsource_enabled";
+        private static string tenjin_topon = "tenjin_topon_enabled";
 
 
         public int callbackOrder => 0;
@@ -55,6 +56,7 @@ namespace Tenjin
             UpdateFacebook();
             UpdateHyperBid();
             UpdateIronSource();
+            UpdateTopOn();
         }
 
         [PostProcessBuild(0)]
@@ -224,6 +226,24 @@ namespace Tenjin
             {
                 UpdateDefines(tenjin_ironsource, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
                 Debug.Log("Ironsource SDK not found");
+            }
+        }
+
+        /// <summary>
+        /// Sets the scripting define symbol `tenjin_topon_enabled` to true if TopOn classes are detected within the Unity project
+        /// </summary>
+        private static void UpdateTopOn()
+        {
+            var toponTypes = new string[] { "AnyThinkAds.Api", "AnyThinkAds.Api.ATCallbackInfo" };
+            if (TypeExists(toponTypes))
+            {
+                UpdateDefines(tenjin_topon, true, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("TopOn SDK found");
+            }
+            else
+            {
+                UpdateDefines(tenjin_topon, false, new BuildTargetGroup[] { BuildTargetGroup.iOS, BuildTargetGroup.Android });
+                Debug.Log("TopOn SDK not found");
             }
         }
 

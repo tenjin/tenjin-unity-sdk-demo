@@ -79,6 +79,9 @@ public class IosTenjin : BaseTenjin
 	[DllImport ("__Internal")]
     private static extern void iosTenjinAdMobImpressionFromJSON(string jsonString);
 
+	[DllImport ("__Internal")]
+    private static extern void iosTenjinTopOnImpressionFromJSON(string jsonString);
+
     [DllImport ("__Internal")]
     private static extern void iosTenjinSetDebugLogs();
 
@@ -365,6 +368,20 @@ public class IosTenjin : BaseTenjin
         }
     }
 
+	public override void SubscribeTopOnImpressions()
+	{
+        TenjinTopOnIntegration.ListenForImpressions(TopOnILARHandler);
+    }
+
+	public void TopOnILARHandler(string json)
+	{
+        if(!string.IsNullOrEmpty(json))
+        {
+			Debug.Log($"Got TopOn ILRD impression data {json}");
+            iosTenjinTopOnImpressionFromJSON(json);
+        }
+    }
+
 	public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate)
 	{
 		if (Debug.isDebugBuild) {
@@ -593,6 +610,11 @@ public class IosTenjin : BaseTenjin
 	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
     {
         Debug.Log("iOS SubscribeAdMobRewardedInterstitialAdImpressions");
+    }
+
+	public override void SubscribeTopOnImpressions()
+    {
+        Debug.Log("iOS SubscribeTopOnImpressions");
     }
 
     public override void SetAppStoreType(AppStoreType appStoreType)

@@ -15,7 +15,7 @@ public abstract class BaseTenjin : MonoBehaviour {
 	protected bool optOut;
 	protected int appSubversion;
 
-    public string SdkVersion { get; } = "1.12.15";
+    public string SdkVersion { get; } = "1.12.17";
 
 	public string ApiKey{
 		get{
@@ -71,4 +71,5 @@ public abstract class BaseTenjin : MonoBehaviour {
 	public abstract void SubscribeAdMobRewardedAdImpressions(object rewardedAd, string adUnitId);
 	public abstract void SubscribeAdMobInterstitialAdImpressions(object interstitialAd, string adUnitId);
 	public abstract void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId);
+	public abstract void SubscribeTopOnImpressions();
 }
