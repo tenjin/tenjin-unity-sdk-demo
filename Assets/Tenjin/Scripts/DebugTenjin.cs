@@ -168,6 +168,17 @@ public class DebugTenjin : BaseTenjin {
 		Debug.Log("UpdateConversionValue: " + conversionValue);
 	}
 
+	public override void SubscribeTopOnImpressions()
+	{
+		Debug.Log("Subscribing to topon impressions");
+		TenjinTopOnIntegration.ListenForImpressions(TopOnImpressionHandler);
+	}
+
+	private void TopOnImpressionHandler(string json)
+	{
+		Debug.Log($"Got topon impression data {json}");
+	}
+
 	public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback)
     {
 		Debug.Log("RequestTrackingAuthorizationWithCompletionHandler");

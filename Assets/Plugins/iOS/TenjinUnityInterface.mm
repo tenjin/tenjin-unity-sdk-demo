@@ -185,7 +185,13 @@ void iosTenjinAdMobImpressionFromJSON(const char* jsonString){
 
     [TenjinSDK adMobImpressionFromJSON:jsonStr];
 }
-    
+
+void iosTenjinTopOnImpressionFromJSON(const char* jsonString){
+    NSString *jsonStr = [NSString stringWithUTF8String:jsonString];
+
+    [TenjinSDK topOnImpressionFromJSON:jsonStr];
+}
+
 void iosTenjinRegisterDeepLinkHandler(TenjinDeeplinkHandlerFunc deeplinkHandlerFunc) {
     NSLog(@"Called iosTenjinRegisterDeepLinkHandler");
     registeredDeeplinkHandlerFunc = deeplinkHandlerFunc;

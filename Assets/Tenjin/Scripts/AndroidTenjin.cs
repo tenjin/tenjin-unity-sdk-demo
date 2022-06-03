@@ -370,6 +370,20 @@ public class AndroidTenjin : BaseTenjin {
         tenjinJava.Call ("eventAdImpressionAdMob", args);
 	}
 
+	public override void SubscribeTopOnImpressions()
+    {
+        Debug.Log("Subscribing to TopOn ILRD");
+        TenjinTopOnIntegration.ListenForImpressions(TopOnImpressionHandler);
+    }
+
+	private void TopOnImpressionHandler(string json)
+    {
+        Debug.Log($"Got ILRD impression data {json}");
+        var args = new object[] {json};
+        tenjinJava.Call ("eventAdImpressionTopOn", args);
+    }
+
+
 	public override void SetAppStoreType (AppStoreType appStoreType){
 		object[] args = new object[]{appStoreType};
 		AndroidJavaClass appStoreTypeClass = new AndroidJavaClass(AndroidJavaTenjinAppStoreType); 
@@ -485,6 +499,11 @@ public class AndroidTenjin : BaseTenjin {
 	public override void SubscribeAdMobRewardedInterstitialAdImpressions(object rewardedInterstitialAd, string adUnitId)
 	{
 		Debug.Log("Sending AndroidTenjin:: SubscribeAdMobRewardedInterstitialAdImpressions ");
+	}
+
+	public override void SubscribeTopOnImpressions()
+	{
+		Debug.Log("Sending AndroidTenjin:: SubscribeTopOnImpressions ");
 	}
 
 	public override void DebugLogs(){

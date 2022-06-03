@@ -199,5 +199,11 @@ internal class AdMobImpressionDataToJSON
     public string response_id;
     public string precision_type;
     public string mediation_adapter_class_name;
+#if UNITY_IPHONE
+    public double value_micros;
+#elif UNITY_ANDROID
     public long value_micros;
+#else
+    public long value_micros;
+#endif
 }
