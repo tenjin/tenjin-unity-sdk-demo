@@ -51,6 +51,10 @@ public class DebugTenjin : BaseTenjin {
 		Debug.Log ("Sending DebugTenjin::GetDeeplink");
 	}
 
+	public override void GetAttributionInfo(Tenjin.AttributionInfoDelegate attributionInfoDelegate) {
+		Debug.Log ("Sending DebugTenjin::GetAttributionInfo");
+	}
+
 	public override void OptIn(){
 		Debug.Log ("OptIn ");
 	}

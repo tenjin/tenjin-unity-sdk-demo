@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public static class Tenjin  {
 
 	public delegate void DeferredDeeplinkDelegate(Dictionary<string, string> deferredLinkData);
+	public delegate void AttributionInfoDelegate(Dictionary<string, string> attributionInfoData);
 
 	//create dictionary of instances of tenjin with API keys
 	private static Dictionary<string, BaseTenjin> _instances = new Dictionary<string, BaseTenjin>();
