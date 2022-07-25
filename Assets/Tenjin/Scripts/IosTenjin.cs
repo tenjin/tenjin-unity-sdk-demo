@@ -68,6 +68,9 @@ public class IosTenjin : BaseTenjin
  	private static extern void iosTenjinRegisterDeepLinkHandler(DeepLinkHandlerNativeDelegate deepLinkHandlerNativeDelegate);
 
 	[DllImport ("__Internal")]
+ 	private static extern void iosTenjinGetAttributionInfo(AttributionInfoNativeDelegate attributionInfoNativeDelegate);
+
+	[DllImport ("__Internal")]
     private static extern void iosTenjinAppLovinImpressionFromJSON(string jsonString);
 
 	[DllImport ("__Internal")]
@@ -89,9 +92,13 @@ public class IosTenjin : BaseTenjin
     private static extern void iosTenjinSetWrapperVersion(string wrapperString);
 
 	private delegate void DeepLinkHandlerNativeDelegate(IntPtr deepLinkDataPairArray, int deepLinkDataPairCount);
+	private delegate void AttributionInfoNativeDelegate(IntPtr attributionInfoDataPairArray, int attributionInfoDataPairCount);
 	
 	private static readonly Stack<Dictionary<string, string>> deferredDeeplinkEvents = new Stack<Dictionary<string, string>>();
+	private static readonly Stack<Dictionary<string, string>> attributionInfoEvents = new Stack<Dictionary<string, string>>();
+
 	private static Tenjin.DeferredDeeplinkDelegate registeredDeferredDeeplinkDelegate;
+	private static Tenjin.AttributionInfoDelegate registeredAttributionInfoDelegate;
 
 	public override void Init(string apiKey)
 	{
@@ -391,6 +398,15 @@ public class IosTenjin : BaseTenjin
 		iosTenjinRegisterDeepLinkHandler(DeepLinkHandler);
 	}
 
+	public override void GetAttributionInfo(Tenjin.AttributionInfoDelegate attributionInfoDelegate)
+	{
+		if (Debug.isDebugBuild) {
+			Debug.Log ("Sending IosTenjin::GetAttributionInfo");
+		}
+		registeredAttributionInfoDelegate = attributionInfoDelegate;
+		iosTenjinGetAttributionInfo(AttributionInfo);
+	}
+
 	public override void DebugLogs()
 	{
 		iosTenjinSetDebugLogs();
@@ -403,6 +419,14 @@ public class IosTenjin : BaseTenjin
 				Dictionary<string, string> deepLinkData = deferredDeeplinkEvents.Pop();
 				if (registeredDeferredDeeplinkDelegate != null) {
 					registeredDeferredDeeplinkDelegate(deepLinkData);
+				}
+			}
+		}
+		lock (attributionInfoEvents) {
+			while (attributionInfoEvents.Count > 0) {
+				Dictionary<string, string> attributionInfoData = attributionInfoEvents.Pop();
+				if (registeredAttributionInfoDelegate != null) {
+					registeredAttributionInfoDelegate(attributionInfoData);
 				}
 			}
 		}
@@ -419,6 +443,20 @@ public class IosTenjin : BaseTenjin
 
 		lock (deferredDeeplinkEvents) {
 			deferredDeeplinkEvents.Push(deepLinkData);
+		}
+	}
+
+	[MonoPInvokeCallback(typeof(AttributionInfoNativeDelegate))]
+	private static void AttributionInfo(IntPtr attributionInfoDataPairArray, int attributionInfoDataPairCount)
+	{
+		if (attributionInfoDataPairArray == IntPtr.Zero)
+			return;
+
+		Dictionary<string, string> attributionInfoData = 
+			NativeUtility.MarshalStringStringDictionary(attributionInfoDataPairArray, attributionInfoDataPairCount);
+
+		lock (attributionInfoEvents) {
+			attributionInfoEvents.Push(attributionInfoData);
 		}
 	}
 
@@ -530,6 +568,11 @@ public class IosTenjin : BaseTenjin
     public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate)
     {
         Debug.Log("Sending IosTenjin::GetDeeplink");
+    }
+
+    public override void GetAttributionInfo(Tenjin.AttributionInfoDelegate attributionInfoDelegate)
+    {
+        Debug.Log("Sending IosTenjin::GetAttributionInfo");
     }
 
     public override void OptIn()

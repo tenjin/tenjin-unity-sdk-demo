@@ -15,7 +15,7 @@ public abstract class BaseTenjin : MonoBehaviour {
 	protected bool optOut;
 	protected int appSubversion;
 
-    public string SdkVersion { get; } = "1.12.18";
+    public string SdkVersion { get; } = "1.12.20";
 
 	public string ApiKey{
 		get{
@@ -59,6 +59,7 @@ public abstract class BaseTenjin : MonoBehaviour {
 	public abstract void SendEvent (string eventName, string eventValue);
 	public abstract void Transaction(string productId, string currencyCode, int quantity, double unitPrice, string transactionId, string receipt, string signature);
 	public abstract void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate);
+	public abstract void GetAttributionInfo(Tenjin.AttributionInfoDelegate attributionInfoDelegate);
 	public abstract void RegisterAppForAdNetworkAttribution();
 	public abstract void UpdateConversionValue(int conversionValue);
 	public abstract void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback);

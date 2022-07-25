@@ -19,6 +19,7 @@ typedef struct TenjinStringStringKeyValuePair {
 } TenjinStringStringKeyValuePair;
 
 typedef void (*TenjinDeeplinkHandlerFunc)(TenjinStringStringKeyValuePair* deepLinkDataPairArray, int32_t deepLinkDataPairCount);
+typedef void (*TenjinAttributionInfoFunc)(TenjinStringStringKeyValuePair* attributionInfoDataPairArray, int32_t attributionInfoDataPairCount);
 
 void iosTenjinInit(const char* apiKey);
 void iosTenjinInitWithSharedSecret(const char* apiKey, const char* sharedSecret);
@@ -38,6 +39,7 @@ void iosTenjinSendEventWithValue(const char* eventName, const char* eventValue);
 void iosTenjinTransaction(const char* productId, const char* currencyCode, int quantity, double price);
 void iosTenjinTransactionWithReceiptData(const char* productId, const char* currencyCode, int quantity, double price, const char* transactionId, const char* receipt);
 void iosTenjinRegisterDeepLinkHandler(TenjinDeeplinkHandlerFunc deeplinkHandlerFunc);
+void iosTenjinGetAttributionInfo(TenjinAttributionInfoFunc attributionInfoFunc);
 
 void iosTenjinOptIn();
 void iosTenjinOptOut();

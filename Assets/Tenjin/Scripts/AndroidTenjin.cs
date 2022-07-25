@@ -219,6 +219,47 @@ public class AndroidTenjin : BaseTenjin {
 		}
 	}
 
+	public override void GetAttributionInfo(Tenjin.AttributionInfoDelegate attributionInfoDelegate)
+	{
+		AttributionInfoListener onAttributionInfoListener = new AttributionInfoListener(attributionInfoDelegate);
+		Debug.Log ("Sending AndroidTenjin::GetAttributionInfo");
+		tenjinJava.Call ("getAttributionInfo", onAttributionInfoListener);
+	}
+
+	private class AttributionInfoListener : AndroidJavaProxy
+	{
+		private Tenjin.AttributionInfoDelegate callback;
+
+		public AttributionInfoListener(Tenjin.AttributionInfoDelegate getAttributionInfoCallback) : base("com.tenjin.android.AttributionInfoCallback")
+		{
+			this.callback = getAttributionInfoCallback;
+		}
+
+		public void onSuccess(AndroidJavaObject data)
+		{
+			Dictionary<string, string> attributionInfoData = new Dictionary<string, string>();
+			string adNetwork = data.Call<string>("get", "ad_network");
+			string advertisingId = data.Call<string>("get", "advertising_id");
+			string campaignId = data.Call<string>("get", "campaign_id");
+			string campaignName = data.Call<string>("get", "campaign_name");
+
+			if (!string.IsNullOrEmpty(adNetwork)) {
+				attributionInfoData["ad_network"] = adNetwork;
+			}
+			if (!string.IsNullOrEmpty(advertisingId)) {
+				attributionInfoData["advertising_id"] = advertisingId;
+			}
+			if (!string.IsNullOrEmpty(campaignId)) {
+				attributionInfoData["campaign_id"] = campaignId;
+			}
+			if (!string.IsNullOrEmpty(campaignName)) {
+				attributionInfoData["campaign_name"] = campaignName;
+			}
+
+			callback(attributionInfoData);
+		}
+	}
+
 	public override void OptIn(){
 		optIn = true;
 		tenjinJava.Call ("optIn");
@@ -444,6 +485,10 @@ public class AndroidTenjin : BaseTenjin {
 
 	public override void GetDeeplink(Tenjin.DeferredDeeplinkDelegate deferredDeeplinkDelegate) {
 		Debug.Log ("Sending AndroidTenjin::GetDeeplink");
+	}
+
+	public override void GetAttributionInfo(Tenjin.AttributionInfoDelegate attributionInfoDelegate) {
+		Debug.Log ("Sending AndroidTenjin::GetAttributionInfo");
 	}
 
 	public override void OptIn(){

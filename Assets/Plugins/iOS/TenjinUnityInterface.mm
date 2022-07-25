@@ -13,6 +13,7 @@ void iosTenjin_InternalFreeStringStringKeyValuePairs(TenjinStringStringKeyValueP
 bool iosTenjin_InternalConvertDictionaryToStringStringPairs(NSDictionary<NSString*, NSObject*>* dictionary, TenjinStringStringKeyValuePair** outPairArray, int* outPairCount);
 
 TenjinDeeplinkHandlerFunc registeredDeeplinkHandlerFunc;
+TenjinAttributionInfoFunc registeredAttributionInfoFunc;
 
 void iosTenjinInit(const char* apiKey){
     NSString *apiKeyStr = [NSString stringWithUTF8String:apiKey];
@@ -207,6 +208,24 @@ void iosTenjinRegisterDeepLinkHandler(TenjinDeeplinkHandlerFunc deeplinkHandlerF
         registeredDeeplinkHandlerFunc(deepLinkDataPairArray, deepLinkDataPairArrayCount);
 
         iosTenjin_InternalFreeStringStringKeyValuePairs(deepLinkDataPairArray, deepLinkDataPairArrayCount);
+    }];
+}
+
+void iosTenjinGetAttributionInfo(TenjinAttributionInfoFunc attributionInfoFunc) {
+    NSLog(@"Called iosTenjinGetAttributionInfo");
+    registeredAttributionInfoFunc = attributionInfoFunc;
+    [[TenjinSDK sharedInstance] getAttributionInfo:^(NSDictionary *params, NSError *error) {
+        NSLog(@"Entered attributionInfo");
+        if (registeredAttributionInfoFunc == NULL)
+            return;
+
+        TenjinStringStringKeyValuePair* attributionInfoDataPairArray;
+        int32_t attributionInfoDataPairArrayCount;
+        iosTenjin_InternalConvertDictionaryToStringStringPairs(params, &attributionInfoDataPairArray, &attributionInfoDataPairArrayCount);
+
+        registeredAttributionInfoFunc(attributionInfoDataPairArray, attributionInfoDataPairArrayCount);
+
+        iosTenjin_InternalFreeStringStringKeyValuePairs(attributionInfoDataPairArray, attributionInfoDataPairArrayCount);
     }];
 }
 
