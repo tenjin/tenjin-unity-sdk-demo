@@ -170,8 +170,9 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.tenjin.test.unitydemo
+    Android: com.tenjin.unitytest
     Standalone: com.Company.ProductName
+    iPhone: com.tenjin.unitytest
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 21
@@ -647,8 +648,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    4: 
-    7: 
+    4: tenjin_applovin_enabled
+    7: tenjin_applovin_enabled
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
