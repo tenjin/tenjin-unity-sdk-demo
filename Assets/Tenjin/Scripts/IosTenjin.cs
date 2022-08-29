@@ -47,6 +47,9 @@ public class IosTenjin : BaseTenjin
 	private static extern void iosTenjinUpdateConversionValue(int conversionValue);
 
 	[DllImport ("__Internal")]
+	private static extern void iosTenjinUpdatePostbackConversionValue(int conversionValue);
+
+	[DllImport ("__Internal")]
 	private static extern void iosTenjinRequestTrackingAuthorizationWithCompletionHandler();
 
 	[DllImport ("__Internal")]
@@ -213,6 +216,14 @@ public class IosTenjin : BaseTenjin
 			Debug.Log ("iOS UpdateConversionValue");
 		}
 		iosTenjinUpdateConversionValue (conversionValue);
+	}
+
+	public override void UpdatePostbackConversionValue(int conversionValue)
+	{
+		if (Debug.isDebugBuild) {
+			Debug.Log ("iOS UpdatePostbackConversionValue");
+		}
+		iosTenjinUpdatePostbackConversionValue (conversionValue);
 	}
 
 	public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback)
@@ -603,6 +614,11 @@ public class IosTenjin : BaseTenjin
     public override void UpdateConversionValue(int conversionValue)
     {
         Debug.Log("iOS UpdateConversionValue: " + conversionValue);
+    }
+
+	public override void UpdatePostbackConversionValue(int conversionValue)
+    {
+        Debug.Log("iOS UpdatePostbackConversionValue: " + conversionValue);
     }
 
     public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback)

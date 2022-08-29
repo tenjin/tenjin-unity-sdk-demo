@@ -172,6 +172,11 @@ public class DebugTenjin : BaseTenjin {
 		Debug.Log("UpdateConversionValue: " + conversionValue);
 	}
 
+	public override void UpdatePostbackConversionValue(int conversionValue)
+	{
+		Debug.Log("UpdatePostbackConversionValue: " + conversionValue);
+	}
+
 	public override void SubscribeTopOnImpressions()
 	{
 		Debug.Log("Subscribing to topon impressions");

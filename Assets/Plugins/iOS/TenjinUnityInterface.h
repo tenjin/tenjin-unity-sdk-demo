@@ -47,6 +47,7 @@ void iosTenjinOptInParams(char** params, int size);
 void iosTenjinOptOutParams(char** params, int size);
 void iosTenjinAppendAppSubversion(int subversion);
 void iosTenjinUpdateConversionValue(int conversionValue);
+void iosTenjinUpdatePostbackConversionValue(int conversionValue);
 void iosTenjinRequestTrackingAuthorizationWithCompletionHandler();
 
 void iosTenjinSetDebugLogs();

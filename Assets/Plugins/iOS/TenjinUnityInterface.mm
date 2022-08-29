@@ -136,6 +136,11 @@ void iosTenjinUpdateConversionValue(int conversionValue){
     [TenjinSDK updateConversionValue:conversionValue];
 }
 
+void iosTenjinUpdatePostbackConversionValue(int conversionValue){
+    NSLog(@"Called Tenjin [TenjinSDK updatePostbackConversionValue]");
+    [TenjinSDK updatePostbackConversionValue:conversionValue];
+}
+
 void iosTenjinRegisterAppForAdNetworkAttribution(){
     NSLog(@"Called Tenjin [TenjinSDK registerAppForAdNetworkAttribution]");
     [TenjinSDK registerAppForAdNetworkAttribution];

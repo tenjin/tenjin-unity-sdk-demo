@@ -289,6 +289,14 @@ public class AndroidTenjin : BaseTenjin {
 		tenjinJava.Call ("updateConversionValue", args);
 	}
 
+	public override void UpdatePostbackConversionValue(int conversionValue){
+		if (Debug.isDebugBuild) {
+			Debug.Log ("Android UpdatePostbackConversionValue");
+		}
+		object[] args = new object[]{conversionValue};
+		tenjinJava.Call ("updatePostbackConversionValue", args);
+	}
+
 	public override void RequestTrackingAuthorizationWithCompletionHandler(Action<int> trackingAuthorizationCallback) {
 	}
 
@@ -558,6 +566,11 @@ public class AndroidTenjin : BaseTenjin {
 	public override void UpdateConversionValue(int conversionValue)
 	{
 		Debug.Log("Sending UpdateConversionValue: " + conversionValue);
+	}
+	
+	public override void UpdatePostbackConversionValue(int conversionValue)
+	{
+		Debug.Log("Sending UpdatePostbackConversionValue: " + conversionValue);
 	}
 
 	public override void RegisterAppForAdNetworkAttribution()
